@@ -1,0 +1,13 @@
+TOOL PATH
+designer.exe:
+D:\PythonSDK\venv\Lib\site-packages\pyqt5_tools\Qt\bin
+
+COMMAND
+To install multiple modules through requirements.txt, move the file under program folder:
+pip install -r requirements.txt
+
+To compile .ui file to .py file, first make sure pyqt5-tools is installed includes pyuic5.exe:
+pyuic5 mainwindow.ui -o mainwindow.py
+
+
+exec(open("./test.py").read())
