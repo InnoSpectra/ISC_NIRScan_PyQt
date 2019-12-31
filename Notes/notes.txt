@@ -9,5 +9,8 @@ pip install -r requirements.txt
 To compile .ui file to .py file, first make sure pyqt5-tools is installed includes pyuic5.exe:
 pyuic5 mainwindow.ui -o mainwindow.py
 
+To generate execution:
+python setup.py build
 
 exec(open("./test.py").read())
+

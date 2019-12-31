@@ -3,4 +3,4 @@ PyQt5-sip==4.19.17
 pyqt5-tools==5.13.0.1.5
 pywin32-ctypes==0.2.0
 QtPy==1.6.0
-
+cx-Freeze==5.1.1

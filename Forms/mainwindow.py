@@ -804,7 +804,7 @@ class Ui_MainWindow(object):
         self.pushButton_eeprom_read.setText(_translate("MainWindow", "Read Coeff"))
         self.pushButton_eeprom_write.setText(_translate("MainWindow", "Write Coeff"))
         self.label_ref_cal.setText(_translate("MainWindow", "Ref Cal Ver:"))
-        self.pushButton_eeprom_restore_default.setText(_translate("MainWindow", "Restore Default"))
+        self.pushButton_eeprom_restore_default.setText(_translate("MainWindow", "Factory Default"))
         self.checkBox_eeprom_writeEN.setText(_translate("MainWindow", "Write Enable"))
         self.label_scan_config.setText(_translate("MainWindow", "Scan Conf Ver:"))
         self.label_cal_coeff.setText(_translate("MainWindow", "Cal Coeff Ver:"))

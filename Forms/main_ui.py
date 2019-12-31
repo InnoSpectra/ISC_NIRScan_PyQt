@@ -29,9 +29,9 @@ class EventMessageBox(QtWidgets.QMessageBox):
         self.setWindowTitle("Processing...")
         self.msg = msg
 
-        self.time_to_wait = timeout
+        self.time_to_wait = 5
         self.input_time = timeout
-        self.setText(self.msg + " ( {0} seconds left)".format(timeout))
+        self.setText(self.msg + ": Please wait about {0} seconds".format(timeout + 5))
         self.setStandardButtons(QtWidgets.QMessageBox.NoButton)
         self.timer = QtCore.QTimer(self)
         self.timer.setInterval(1000)
@@ -46,8 +46,7 @@ class EventMessageBox(QtWidgets.QMessageBox):
 
     def changeContent(self):
         ret = -1
-        self.setText(self.msg + " ( {0} seconds left)".format(self.time_to_wait))
-        if self.time_to_wait == self.input_time - 1:
+        if self.time_to_wait == 5:
             if self.event is not None:
                 if self.param is not None:
                     print(str(self.event), self.param)
@@ -60,6 +59,7 @@ class EventMessageBox(QtWidgets.QMessageBox):
                     self.setResult(-1)
                 self.setResult(0)
 
+        self.setText(self.msg + " ( {0} seconds left)".format(self.time_to_wait))
         self.time_to_wait -= 1
         if self.time_to_wait <= 0:
             self.close()
@@ -248,7 +248,13 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
         if ret < 0:
             return
 
-        messagebox = EventMessageBox(5, self, "Scan", self.scan.PerformScan, self.ref_selection)
+        # This may be changed based on different Tiva version
+        ret = self.scan.SetFixedPGAGain(True, self.PGA_gain)
+        if ret != 0 or self.scan.GetPGAGain() != self.PGA_gain:
+            self.ErrorMsg("Failed to set PGA gain")
+
+        est_time = int(float(self.label_scan_time_val.text()))
+        messagebox = EventMessageBox(est_time, self, "Scan", self.scan.PerformScan, self.ref_selection)
         ret = messagebox.exec_()
         if ret < 0:
             self.ErrorMsg("Scan Failed!")
@@ -538,6 +544,7 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
             self.label_grren_val.setText(str(self.device.DevSensors['PhotoDetector']))
 
     def SetUiInfo(self):
+        self._clear_plot()
         if self.device.IsConnected():
             self.label_connected.setText('Connected!')
             self.tabWidget.setTabEnabled(1, True)
