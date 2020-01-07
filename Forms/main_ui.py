@@ -90,7 +90,8 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
         self.connectionTimer.start()
 
     def init_ui(self):
-        print("UI initialization")
+        self.setWindowTitle("ISC NIRScan GUI SDK Python v1.0.0")
+
         self.pushButton_edit_scan_config_2.clicked.connect(self.puchButton_edit_scan_config_onClick)
         self.comboBox_scanID.currentIndexChanged.connect(self.comboBox_scanID_indexChange)
         self.radioButton_ref_factory.clicked.connect(self.radioButton_ref_factory_onClick)
@@ -556,7 +557,7 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
 
             # Device information
             if self.device.Information() == 0:
-                self.label_device_GUIver.setText('0.0.0')
+                self.label_device_GUIver.setText(str(self.windowTitle())[-5:])
                 self.label_device_TivaSWver.setText(str(self.device.DevInfo['TivaRev']).strip('[]').replace(',', '.'))
                 self.label_device_DLPCver.setText(str(self.device.DevInfo['DLPCRev']).strip('[]').replace(',', '.'))
                 self.label_device_SpectrumLibVer.setText(str(self.device.DevInfo['SpecLibVer']).strip('[]').replace(',', '.'))
@@ -606,7 +607,6 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.comboBox_scanID.addItem(self.cfglist.TargetConfig[i][2])
             self.comboBox_scanID.setCurrentIndex(-1)
             self.comboBox_scanID.blockSignals(False)
-            print('populate configs', self.cfglist.GetTargetActiveScanIndex())
             index = self.cfglist.GetTargetActiveScanIndex()
             if index < 0:
                 index = 0

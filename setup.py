@@ -28,7 +28,9 @@ build_exe_options = {
                          'SDK/iscpy.pyd',
                          'SDK/libdlpspec.dll',
                          'SDK/lmdfu.dll',
-                         'SDK/lmusbdll.dll']
+                         'SDK/lmusbdll.dll',
+                         'ISC_Logo.ico'
+                         ]
                      }
 
 # build_msi_options = {'add_to_path': False,
