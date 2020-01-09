@@ -1,3 +1,20 @@
+# -*- coding: utf-8 -*-
+"""
+    This file is part of ISC NIRScan GUI SDK Python.
+
+    ISC NIRScan GUI SDK Python is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    ISC NIRScan GUI SDK Python is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 from PyQt5 import QtWidgets, QtChart, QtCore, QtGui
 import time
 import datetime
@@ -210,7 +227,7 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
         PGA_gain = self.comboBox_pga_gain.currentText()
         if len(PGA_gain) < 3:
             self.PGA_gain = int(PGA_gain)
-            ret = self.scan.SetPGAGain(self.PGA_gain)
+            ret = self.scan.SetFixedPGAGain(True, self.PGA_gain)
             if ret < 0:
                 self.ErrorMsg("Connot set PGA gain")
                 return
@@ -250,8 +267,8 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
         # This may be changed based on different Tiva version
-        ret = self.scan.SetFixedPGAGain(True, self.PGA_gain)
-        if ret != 0 or self.scan.GetPGAGain() != self.PGA_gain:
+        ret = self.scan.SetFixedPGAGain(False, 1)
+        if ret != 0:
             self.ErrorMsg("Failed to set PGA gain")
 
         est_time = int(float(self.label_scan_time_val.text()))
@@ -445,9 +462,8 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.pushButton_tiva_fw_usb_update.setEnabled(True)
 
     def pushButton_tiva_fw_usb_update_onClick(self):
-        ret = self.device.Tiva_SetTivaToBootloader()
-        messagebox = EventMessageBox(2, self, "Tiva Update Phase 1")
-        messagebox.exec_()
+        messagebox = EventMessageBox(2, self, "Tiva Update Phase 1", self.device.Tiva_SetTivaToBootloader)
+        ret = messagebox.exec_()
         if ret >= 0:
             filePath = self.lineEdit_tiva_fw_filename.text()
             messagebox = EventMessageBox(10, self, "Tiva Update Phase 2", self.device.Tiva_FWUpdate, filePath)
@@ -688,7 +704,7 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.radioButton_Absorbance.isChecked():
             if self.scan.WaveLength != [] and self.scan.Absorbance != []:
                 self.axisY.setTitleText("Absorbance")
-                self.axisY.setRange(-5, 5)
+                self.axisY.setRange(-1, 5)
                 for x, y in zip(self.scan.WaveLength, self.scan.Absorbance):
                     series.append(x, y)
         elif self.radioButton_Intensity.isChecked():
@@ -702,7 +718,7 @@ class MainUI(QtWidgets.QMainWindow, Ui_MainWindow):
         elif self.radioButton_Reflectance.isChecked():
             if self.scan.WaveLength != [] and self.scan.Reflectance != []:
                 self.axisY.setTitleText("Reflectance")
-                self.axisY.setRange(-5, 5)
+                self.axisY.setRange(-1, 1)
                 for x, y in zip(self.scan.WaveLength, self.scan.Reflectance):
                     series.append(x, y)
         elif self.radioButton_Reference.isChecked():
